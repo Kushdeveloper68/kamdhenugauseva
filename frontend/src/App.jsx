@@ -13,9 +13,11 @@ import Services from './pages/Services.jsx'
 import SupportUs from './pages/SupportUs.jsx'
 import Team from './pages/Team.jsx'
 import Volunteer from './pages/Volunteer.jsx'
+import ScrollAnimationProvider from './components/ScrollAnimationProvider.jsx'
 
 function App() {
   return (
+    <ScrollAnimationProvider>
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
@@ -33,6 +35,7 @@ function App() {
         <Route path="volunteer" element={<Volunteer />} />
       </Route>
     </Routes>
+    </ScrollAnimationProvider>
   )
 }
 
