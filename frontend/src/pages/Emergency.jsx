@@ -1,5 +1,5 @@
 const steps = [
-  {
+  { 
     number: '1',
     title: 'Report',
     description: 'Call our emergency helpline immediately or fill out the form with accurate details and photos to help us prepare.',
