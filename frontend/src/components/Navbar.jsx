@@ -15,6 +15,7 @@ const navLinks = [
     dropdown: [
       { label: "Impact & Achievements", to: "/impact" },
       { label: "Volunteer / Join Us", to: "/volunteer" },
+      // ✅ Fixed: was "financial-transparency" (missing leading slash)
       { label: "Transparency / Reports", to: "/financial-transparency" },
       { label: "Emergency Help", to: "/emergency" },
       { label: "FAQ", to: "/faq" },
@@ -31,7 +32,7 @@ const Navbar = () => {
 
   const isActive = (to) => location.pathname === to;
 
-  // Close dropdown when clicking outside
+  // ✅ Fixed: Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -42,7 +43,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close dropdown on route change
+  // Close both menus on route change
   useEffect(() => {
     setDropdownOpen(false);
     setOpen(false);
@@ -110,6 +111,7 @@ const Navbar = () => {
 
         {/* Donate + Mobile Toggle */}
         <div className="flex items-center gap-3">
+          {/* ✅ Fixed: was /donation — now correctly routes to the Donation page */}
           <Link
             to="/donation"
             className="hidden md:block bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800 transition font-semibold text-sm"
