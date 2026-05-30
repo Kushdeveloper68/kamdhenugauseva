@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const stats = [
   { value: '5000+', label: 'Cows Rescued' },
   { value: '24/7', label: 'Medical Care' },
@@ -49,9 +51,8 @@ function Home() {
       <section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            alt="Hero Cow Rescue"
+            alt="A gentle cow resting peacefully in a clean, natural sanctuary setting"
             className="image-zoom h-full w-full scale-105 object-cover"
-            data-alt="A compelling, high-quality photograph of a gentle cow resting peacefully in a clean, natural sanctuary setting. The morning sunlight casts a warm, golden glow over the scene, highlighting the soft textures of the cow's coat. The background features lush, organic green fields slightly out of focus to draw attention to the animal. The image is framed to evoke deep compassion and serenity, perfectly aligning with a modern, corporate non-profit aesthetic that values emotional connection and high-end visual storytelling. The lighting is bright and hopeful, maintaining a professional light-mode feel."
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwjQg-S8xdkpfP89yyxaC3cNxj6UKVPV2k2fmoCGYdgbNj2rllbT5UCXWxKSFuk0F-gsUf0qwJB7FRS7M1ITyBMkli3C3wly5MeCBbgsA1Yy4j4oNCopNzlJtKgumxluo9BsXFK_W8p1J77rq35LaRL0byqA5WmPIU5xYrxs8zIimB9VHtvk1y6HFtOYndrToY7OgiT6NLKoTr1fuK1_Rt1V6tDXMEY5AgHPx9QcY_WouHF8WTb-iqGI7-TEYpfqsdoFzHpXjQ"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/25" />
@@ -61,9 +62,7 @@ function Home() {
         <div className="relative z-10 container mx-auto max-w-container-max px-gutter py-20 text-white">
           <div className="max-w-3xl space-y-6">
             <div className="reveal-up inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm backdrop-blur-md" style={{ animationDelay: '60ms' }}>
-              <span className="material-symbols-outlined text-sm" data-icon="pets">
-                pets
-              </span>
+              <span className="material-symbols-outlined text-sm">pets</span>
               Compassionate rescue. Modern care. Trusted sanctuary.
             </div>
             <h1 className="reveal-up font-h1 text-5xl text-white md:text-7xl" style={{ animationDelay: '140ms' }}>
@@ -73,24 +72,22 @@ function Home() {
               Join Kaam Denu Gaushala in our mission to rescue, rehabilitate, and provide a sanctuary for cows in need.
             </p>
             <div className="reveal-up flex flex-wrap gap-4" style={{ animationDelay: '300ms' }}>
-              <a
+              {/* ✅ Fixed: was href="#donate" — now a proper Link to the Donation page */}
+              <Link
+                to="/donation"
                 className="button-shine hover-lift inline-flex items-center rounded-full bg-[#FFC107] px-8 py-4 font-label text-label text-[#1B1B1B] shadow-lg hover:shadow-2xl"
-                href="#donate"
               >
                 Donate Now
-                <span className="material-symbols-outlined ml-2 text-sm transition-transform duration-300" data-icon="favorite">
-                  favorite
-                </span>
-              </a>
-              <a
+                <span className="material-symbols-outlined ml-2 text-sm">favorite</span>
+              </Link>
+              {/* ✅ Fixed: was href="#emergency" — now a Link to the Emergency page */}
+              <Link
+                to="/emergency"
                 className="button-shine hover-lift inline-flex items-center rounded-full border border-white/70 bg-white/5 px-8 py-4 font-label text-label text-white backdrop-blur-sm hover:bg-white/15"
-                href="#emergency"
               >
                 Emergency Help
-                <span className="material-symbols-outlined ml-2 text-sm" data-icon="support_agent">
-                  support_agent
-                </span>
-              </a>
+                <span className="material-symbols-outlined ml-2 text-sm">support_agent</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -113,24 +110,22 @@ function Home() {
         </div>
       </section>
 
-      <section className="bg-background py-section-py-mobile md:py-section-py-desktop">
+      {/* ✅ Fixed: added id="learn-more" so the "Read More" anchor works */}
+      <section id="learn-more" className="bg-background py-section-py-mobile md:py-section-py-desktop">
         <div className="container mx-auto max-w-container-max px-gutter">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="group relative">
               <div className="absolute inset-0 -z-10 translate-x-4 translate-y-4 rounded-3xl bg-primary-container/10 transition-transform duration-300 group-hover:translate-x-6 group-hover:translate-y-6" />
               <img
-                alt="Gaushala Sanctuary"
+                alt="A pristine animal sanctuary nestled in a lush green valley"
                 className="image-zoom h-[500px] w-full rounded-3xl object-cover shadow-lg"
-                data-alt="A wide, sweeping photograph of a pristine animal sanctuary nestled in a lush green valley. The facility features modern, clean barns with open-air designs to ensure ventilation and sunlight. In the foreground, healthy cows graze peacefully on vibrant green grass. The lighting is crisp, bright, and optimistic, capturing a beautiful spring day with clear blue skies. The image composition is balanced and professional, perfectly suited for a high-end corporate non-profit website that emphasizes organic care and professional management."
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2RYJdONIJrNQW1AvvUbFguF4zplSthaseZcyWowHuCuu3bxmGNcdAC5A-ZDJ0urHJSTrLezjeBDKN0p63ywBpXnSLWx28Hg5mayIYI-1ri51mIDqcrCkAQ01RwpM08cQE_E-hslLHXjHwnnEPnz-yiLiyLan-8Zu2NiHPNTTfkhmU2iWoX46gxuLtli_vfK4POqea8jxprrmRA3dBbhhl1ODm1NoXzhJRX1KVbMhuJxpuOrxTj7RlLVCDdOrgqVvLQ9Wl-o41"
               />
             </div>
 
             <div className="space-y-6">
               <div className="reveal-up inline-flex items-center rounded-full bg-primary-container/10 px-4 py-2 text-sm font-label text-primary-container">
-                <span className="material-symbols-outlined mr-2 text-sm" data-icon="volunteer_activism">
-                  volunteer_activism
-                </span>
+                <span className="material-symbols-outlined mr-2 text-sm">volunteer_activism</span>
                 Our Sacred Mission
               </div>
               <h2 className="font-h2 text-h2 text-on-background">Permanent care, not temporary relief.</h2>
@@ -138,12 +133,14 @@ function Home() {
                 At Kaam Denu Gaushala, we believe every life is sacred. Our sanctuary provides a permanent, loving home for cows that have been abandoned, injured, or rescued from harsh conditions. We combine traditional reverence with modern veterinary science to ensure the highest standard of care.
               </p>
               <div className="pt-2">
-                <a className="button-shine hover-lift inline-flex items-center rounded-full bg-primary-container px-8 py-3 font-label text-label text-on-primary shadow-md hover:shadow-xl" href="#learn-more">
+                {/* ✅ Fixed: was href="#learn-more" pointing nowhere, now links to /about */}
+                <Link
+                  to="/about"
+                  className="button-shine hover-lift inline-flex items-center rounded-full bg-primary-container px-8 py-3 font-label text-label text-on-primary shadow-md hover:shadow-xl"
+                >
                   Read More
-                  <span className="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">
-                    arrow_forward
-                  </span>
-                </a>
+                  <span className="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -166,9 +163,7 @@ function Home() {
                 style={{ animationDelay: `${index * 90}ms` }}
               >
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container/10 text-primary-container transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-primary-container group-hover:text-white">
-                  <span className="material-symbols-outlined text-3xl" data-icon={service.icon}>
-                    {service.icon}
-                  </span>
+                  <span className="material-symbols-outlined text-3xl">{service.icon}</span>
                 </div>
                 <h3 className="font-h3 text-h3 text-on-background mb-3">{service.title}</h3>
                 <p className="font-body-md text-on-surface-variant">{service.description}</p>
@@ -183,9 +178,7 @@ function Home() {
           <div className="grid items-center gap-16 lg:grid-cols-2">
             <div className="order-2 space-y-6 lg:order-1">
               <div className="reveal-up inline-flex items-center rounded-full bg-tertiary-container/10 px-4 py-2 text-sm font-label text-tertiary">
-                <span className="material-symbols-outlined mr-2 text-sm" data-icon="auto_stories">
-                  auto_stories
-                </span>
+                <span className="material-symbols-outlined mr-2 text-sm">auto_stories</span>
                 Rescue Story
               </div>
               <h2 className="font-h2 text-h2 text-on-background">Meet Nandini: a journey from neglect to love</h2>
@@ -195,12 +188,11 @@ function Home() {
               <p className="font-body-lg leading-relaxed text-on-surface-variant">
                 Today, months later, Nandini is unrecognizable. She is the playful matriarch of her herd, her coat shines with health, and her gentle eyes reflect the security of her new forever home.
               </p>
-              <a className="inline-flex items-center font-label text-primary-container transition-colors duration-300 hover:text-primary" href="#stories">
+              {/* ✅ Fixed: was href="#stories" — now links to gallery */}
+              <Link to="/gallery" className="inline-flex items-center font-label text-primary-container transition-colors duration-300 hover:text-primary">
                 View more stories
-                <span className="material-symbols-outlined ml-1" data-icon="arrow_forward">
-                  arrow_forward
-                </span>
-              </a>
+                <span className="material-symbols-outlined ml-1">arrow_forward</span>
+              </Link>
             </div>
 
             <div className="order-1 grid gap-4 md:grid-cols-2 lg:order-2">
@@ -212,7 +204,6 @@ function Home() {
                   <img
                     alt={card.alt}
                     className={`image-zoom h-full w-full object-cover ${card.className}`}
-                    data-alt={card.alt}
                     src={card.src}
                   />
                   <div className={`absolute bottom-4 left-4 rounded-full px-3 py-1 text-xs font-label text-white backdrop-blur-sm ${index === 1 ? 'bg-primary-container' : 'bg-black/60'}`}>
@@ -232,12 +223,14 @@ function Home() {
           <p className="mx-auto mb-10 max-w-2xl font-body-lg text-white/90">
             Your contribution directly funds medical supplies, high-quality fodder, and the expansion of our rescue operations. Every donation saves a life.
           </p>
-          <a className="button-shine hover-lift inline-flex items-center rounded-full bg-[#FFC107] px-10 py-4 font-label text-lg text-[#1B1B1B] shadow-lg hover:shadow-2xl" href="#contact">
+          {/* ✅ Fixed: was href="#contact" — now proper Link to /donation */}
+          <Link
+            to="/donation"
+            className="button-shine hover-lift inline-flex items-center rounded-full bg-[#FFC107] px-10 py-4 font-label text-lg text-[#1B1B1B] shadow-lg hover:shadow-2xl"
+          >
             Donate Now
-            <span className="material-symbols-outlined ml-2" data-icon="volunteer_activism">
-              volunteer_activism
-            </span>
-          </a>
+            <span className="material-symbols-outlined ml-2">volunteer_activism</span>
+          </Link>
         </div>
       </section>
     </div>
