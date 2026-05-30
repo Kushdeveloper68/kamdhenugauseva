@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
 
@@ -9,13 +9,13 @@ const navLinks = [
   { label: "Facilities", to: "/facilities" },
   { label: "Gallery", to: "/gallery" },
   { label: "Team", to: "/team" },
-  {label: "Support", to: "/support-us" },
+  { label: "Support", to: "/support-us" },
   {
     label: "More",
     dropdown: [
       { label: "Impact & Achievements", to: "/impact" },
       { label: "Volunteer / Join Us", to: "/volunteer" },
-      { label: "Transparency / Reports", to: "financial-transparency" },
+      { label: "Transparency / Reports", to: "/financial-transparency" },
       { label: "Emergency Help", to: "/emergency" },
       { label: "FAQ", to: "/faq" },
       { label: "Contact", to: "/contact" },
@@ -27,8 +27,26 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const dropdownRef = useRef(null);
 
   const isActive = (to) => location.pathname === to;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setDropdownOpen(false);
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="bg-white shadow-md px-6 md:px-10 py-4 sticky top-0 z-50">
@@ -42,13 +60,16 @@ const Navbar = () => {
         <ul className="hidden md:flex items-center gap-1 font-medium">
           {navLinks.map((link) =>
             link.dropdown ? (
-              <li key={link.label} className="relative">
+              <li key={link.label} className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-1 px-3 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition"
                 >
                   {link.label}
-                  <ChevronDown size={16} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
                 {dropdownOpen && (
                   <ul className="absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-xl shadow-lg py-2 z-50">
@@ -57,7 +78,11 @@ const Navbar = () => {
                         <Link
                           to={item.to}
                           onClick={() => setDropdownOpen(false)}
-                          className={`block px-4 py-2 text-sm hover:bg-green-50 hover:text-green-700 transition ${isActive(item.to) ? "text-green-700 font-semibold bg-green-50" : "text-gray-700"}`}
+                          className={`block px-4 py-2 text-sm hover:bg-green-50 hover:text-green-700 transition ${
+                            isActive(item.to)
+                              ? "text-green-700 font-semibold bg-green-50"
+                              : "text-gray-700"
+                          }`}
                         >
                           {item.label}
                         </Link>
@@ -70,7 +95,11 @@ const Navbar = () => {
               <li key={link.to}>
                 <Link
                   to={link.to}
-                  className={`px-3 py-2 rounded-md transition block hover:bg-green-50 hover:text-green-700 ${isActive(link.to) ? "text-green-700 font-semibold bg-green-50" : "text-gray-700"}`}
+                  className={`px-3 py-2 rounded-md transition block hover:bg-green-50 hover:text-green-700 ${
+                    isActive(link.to)
+                      ? "text-green-700 font-semibold bg-green-50"
+                      : "text-gray-700"
+                  }`}
                 >
                   {link.label}
                 </Link>
@@ -87,7 +116,11 @@ const Navbar = () => {
           >
             Donate 💚
           </Link>
-          <button className="md:hidden text-gray-700" onClick={() => setOpen(!open)}>
+          <button
+            className="md:hidden text-gray-700"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Close menu" : "Open menu"}
+          >
             {open ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
@@ -107,7 +140,11 @@ const Navbar = () => {
                     key={item.to}
                     to={item.to}
                     onClick={() => setOpen(false)}
-                    className={`block px-4 py-2 rounded-md text-sm hover:bg-green-50 hover:text-green-700 transition ${isActive(item.to) ? "text-green-700 font-semibold bg-green-50" : "text-gray-700"}`}
+                    className={`block px-4 py-2 rounded-md text-sm hover:bg-green-50 hover:text-green-700 transition ${
+                      isActive(item.to)
+                        ? "text-green-700 font-semibold bg-green-50"
+                        : "text-gray-700"
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -118,7 +155,11 @@ const Navbar = () => {
                 key={link.to}
                 to={link.to}
                 onClick={() => setOpen(false)}
-                className={`block px-4 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition ${isActive(link.to) ? "text-green-700 font-semibold bg-green-50" : "text-gray-700"}`}
+                className={`block px-4 py-2 rounded-md hover:bg-green-50 hover:text-green-700 transition ${
+                  isActive(link.to)
+                    ? "text-green-700 font-semibold bg-green-50"
+                    : "text-gray-700"
+                }`}
               >
                 {link.label}
               </Link>
