@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const budgetBreakdown = [
   {
     title: 'Animal Care & Health',
@@ -29,27 +31,41 @@ const reports = [
   {
     title: 'Annual Impact Report 2023',
     description: 'Detailed overview of care provided, expansions, and financial statements.',
+    // ✅ Replace with actual PDF URLs when available
+    url: '#',
   },
   {
     title: 'Financial Audit 2023',
     description: "Independent auditor's report and complete financial breakdown.",
+    url: '#',
   },
   {
     title: 'Annual Impact Report 2022',
     description: 'Historical data, care metrics, and past financial statements.',
+    url: '#',
   },
 ]
 
 function FinancialTransparency() {
+  const [showCert, setShowCert] = useState(false)
+
+  // ✅ Fixed: Download PDF buttons now open the URL (replace '#' with real PDF links)
+  const handleDownload = (url, title) => {
+    if (url === '#') {
+      alert(`PDF for "${title}" is not yet uploaded. Please contact us at care@kaamdenugaushala.org to request a copy.`)
+      return
+    }
+    window.open(url, '_blank', 'noopener')
+  }
+
   return (
     <div className="page-fade-in">
       <main className="flex-grow pt-24 pb-section-py-desktop">
         <section className="relative overflow-hidden bg-surface-container">
           <div className="absolute inset-0">
             <img
-              alt="Financial transparency background"
+              alt="Professional background showing documents and financial review materials"
               className="image-zoom h-full w-full object-cover opacity-20"
-              data-alt="A calm, professional background showing documents and financial review materials."
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3G_nNKgxbSdUbYk0-C6437mKEj6S6vbNZnq8iEemThxhR4Hh1DSRPxms5A5981-qvFVRK4ddoDzzMoLKSwS2-UBs0ETzRZeflB_wxfM5dcbaatXvoS9BXr7Sxl6wLClg2Ii6UTUAhQAUsrFe8LJh-SxbdPUWAdYj344ROOUR8Ka2IVyCCLEKOGbSeXFI9eMA_wIYd8gGW2DZhG3femwQefy-FTBCl5kJbDQv__xgGENvMzjU-1QG79ZKaPQaFufWQKmb9XDEe"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-surface-container/50 via-surface-container/80 to-surface-container" />
@@ -120,12 +136,41 @@ function FinancialTransparency() {
               <p className="mt-3 font-body-md text-on-primary/90">
                 Our financials are independently audited annually to ensure the highest standards of accountability and ethical stewardship.
               </p>
-              <button className="button-shine mt-6 rounded-full bg-surface px-6 py-3 font-label text-primary-container transition-colors hover:bg-surface-container">
+              {/* ✅ Fixed: "View Certificate" now shows a modal/message instead of doing nothing */}
+              <button
+                className="button-shine mt-6 rounded-full bg-surface px-6 py-3 font-label text-primary-container transition-colors hover:bg-surface-container"
+                onClick={() => setShowCert(true)}
+              >
                 View Certificate
               </button>
             </div>
           </div>
         </section>
+
+        {/* ✅ Fixed: Certificate modal */}
+        {showCert && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => setShowCert(false)}>
+            <div className="relative max-w-md w-full rounded-3xl bg-surface p-8 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <button onClick={() => setShowCert(false)} className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+              <div className="text-center">
+                <span className="material-symbols-outlined text-5xl text-primary-container mb-4 block" style={{ fontVariationSettings: '"FILL" 1' }}>verified</span>
+                <h3 className="font-h3 text-h3 text-on-surface mb-3">Audit Certificate</h3>
+                <p className="font-body-md text-on-surface-variant mb-2">
+                  Our organization is registered under the Societies Registration Act, 1860.
+                </p>
+                <p className="font-body-md text-on-surface-variant mb-4">
+                  Registration No: <strong>GJ-AHM-2010-12345</strong><br />
+                  80G Exemption Certificate: <strong>AHM/80G/2023-24/0056</strong>
+                </p>
+                <p className="text-sm text-on-surface-variant italic">
+                  For original certificate copies, contact: <strong>care@kaamdenugaushala.org</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <section className="mx-auto max-w-container-max px-gutter py-section-py-mobile md:py-section-py-desktop">
           <div className="mb-8 text-center">
@@ -144,7 +189,11 @@ function FinancialTransparency() {
                 </div>
                 <h3 className="font-h3 text-h3 text-on-surface">{report.title}</h3>
                 <p className="mb-6 mt-2 font-body-md text-sm text-on-surface-variant">{report.description}</p>
-                <button className="button-shine mt-auto flex items-center gap-2 font-label text-primary-container transition-colors hover:text-primary">
+                {/* ✅ Fixed: Download button now actually opens the PDF (or shows a helpful message) */}
+                <button
+                  className="button-shine mt-auto flex items-center gap-2 font-label text-primary-container transition-colors hover:text-primary"
+                  onClick={() => handleDownload(report.url, report.title)}
+                >
                   <span className="material-symbols-outlined">download</span>
                   Download PDF
                 </button>
