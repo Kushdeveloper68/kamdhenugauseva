@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import { GOOGLE_SCRIPT_URL } from '../config/api'
 const INITIAL = { firstName: '', lastName: '', email: '', phone: '', role: 'Caretaking', message: '' }
 
 function Volunteer() {
@@ -24,7 +24,7 @@ function Volunteer() {
   }
 
   // ✅ Fixed: was type="button" — now a proper form with submit handler and validation
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length > 0) {
@@ -32,10 +32,26 @@ function Volunteer() {
       return
     }
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      setSubmitted(true)
-    }, 1200)
+   try {
+await fetch(GOOGLE_SCRIPT_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify({
+    type: "volunteer",
+    ...form
+  })
+})
+
+setSubmitted(true)
+setForm(INITIAL)
+} catch (error) {
+  console.error(error)
+} finally {
+  setLoading(false)
+}
   }
 
   return (

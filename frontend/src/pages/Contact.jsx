@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import { GOOGLE_SCRIPT_URL } from '../config/api'
 const contactItems = [
   {
     icon: 'location_on',
@@ -38,7 +38,7 @@ function Contact() {
   }
 
   // ✅ Fixed: form now has a real submit handler with validation
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length > 0) {
@@ -47,12 +47,29 @@ function Contact() {
     }
     setLoading(true)
     // Simulate async send (replace with real API call when backend is ready)
-    setTimeout(() => {
-      setLoading(false)
-      setSubmitted(true)
-      setForm(INITIAL)
-      setErrors({})
-    }, 1200)
+    try {
+      
+      await fetch(GOOGLE_SCRIPT_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify({
+    type: "contact",
+    ...form
+  })
+})
+
+setSubmitted(true)
+setForm(INITIAL)
+setErrors({})
+
+} catch (error) {
+  console.error(error)
+} finally {
+  setLoading(false)
+}
   }
 
   const handleChange = (field) => (e) => {
