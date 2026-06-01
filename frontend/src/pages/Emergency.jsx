@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
-
+const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN
+const CHAT_ID = '-5085170440'
 const steps = [
   {
     number: '1',
@@ -22,14 +23,24 @@ const steps = [
 ]
 
 function Emergency() {
-  const [form, setForm] = useState({ name: '', phone: '', location: '', details: '' })
-  const [errors, setErrors] = useState({})
-  const [geoLoading, setGeoLoading] = useState(false)
-  const [geoError, setGeoError] = useState('')
-  const [fileName, setFileName] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const fileInputRef = useRef(null)
+ const [form, setForm] = useState({
+  name: '',
+  phone: '',
+  location: '',
+  details: '',
+})
+
+const [errors, setErrors] = useState({})
+const [geoLoading, setGeoLoading] = useState(false)
+const [geoError, setGeoError] = useState('')
+const [fileName, setFileName] = useState('')
+const [selectedFile, setSelectedFile] = useState(null)
+const [submitted, setSubmitted] = useState(false)
+const [submitting, setSubmitting] = useState(false)
+const [submitError, setSubmitError] = useState('')
+const [coords, setCoords] = useState(null)
+
+const fileInputRef = useRef(null)
 
   const handleChange = (field) => (e) => {
     setForm({ ...form, [field]: e.target.value })
@@ -37,42 +48,70 @@ function Emergency() {
   }
 
   // ✅ Fixed: Detect Location now calls the Geolocation API
-  const handleDetectLocation = () => {
-    if (!navigator.geolocation) {
-      setGeoError('Geolocation is not supported by your browser.')
-      return
-    }
-    setGeoLoading(true)
-    setGeoError('')
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords
-        try {
-          // Reverse geocode using a free API
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-          )
-          const data  = await res.json()
-          const address = data.display_name || `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
-          setForm((prev) => ({ ...prev, location: address }))
-        } catch {
-          setForm((prev) => ({ ...prev, location: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}` }))
-        }
-        setGeoLoading(false)
-      },
-      (err) => {
-        setGeoError('Could not get location. Please allow location access and try again.')
-        setGeoLoading(false)
-      },
-      { timeout: 10000 }
-    )
+const handleDetectLocation = () => {
+  if (!navigator.geolocation) {
+    setGeoError('Geolocation is not supported by your browser.')
+    return
   }
 
+  setGeoLoading(true)
+  setGeoError('')
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords
+
+      setCoords({
+        latitude,
+        longitude,
+      })
+
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+        )
+
+        const data = await res.json()
+
+        const address =
+          data.display_name ||
+          `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+
+        setForm((prev) => ({
+          ...prev,
+          location: address,
+        }))
+      } catch {
+        setForm((prev) => ({
+          ...prev,
+          location: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+        }))
+      }
+
+      setGeoLoading(false)
+    },
+    () => {
+      setGeoError(
+        'Could not get location. Please allow location access and try again.'
+      )
+
+      setGeoLoading(false)
+    },
+    {
+      timeout: 10000,
+    }
+  )
+}
+
   // ✅ Fixed: File input now works — clicking the upload area triggers input
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0]
-    if (file) setFileName(file.name)
-  }
+ const handleFileChange = (e) => {
+  const file = e.target.files?.[0]
+
+  if (!file) return
+
+  setSelectedFile(file)
+  setFileName(file.name)
+}
 
   const validate = () => {
     const errs = {}
@@ -82,19 +121,122 @@ function Emergency() {
   }
 
   // ✅ Fixed: form submit now validates and shows confirmation
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
-    }
-    setSubmitting(true)
-    setTimeout(() => {
-      setSubmitting(false)
-      setSubmitted(true)
-    }, 1200)
+  const handleSubmit = async (e) => {
+  e.preventDefault()
+
+  const errs = validate()
+
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs)
+    return
   }
+
+  setSubmitting(true)
+  setSubmitError('')
+
+  try {
+    const emergencyId = `KD-${Date.now()}`
+
+    const mapsLink = coords
+      ? `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`
+      : 'Location unavailable'
+
+    const message = `
+🚨 KAAM DENU EMERGENCY ALERT
+
+━━━━━━━━━━━━━━
+
+🆔 Case ID:
+${emergencyId}
+
+👤 Reporter:
+${form.name || 'Not Provided'}
+
+📞 Phone:
+${form.phone}
+
+📍 Location:
+${form.location}
+
+📝 Situation:
+${form.details || 'No details provided'}
+
+🕒 Time:
+${new Date().toLocaleString('en-IN')}
+
+📌 Maps:
+${mapsLink}
+
+━━━━━━━━━━━━━━
+
+⚠ IMMEDIATE RESCUE MAY BE REQUIRED
+`
+
+    const telegramResponse = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+        }),
+      }
+    )
+
+    const telegramData = await telegramResponse.json()
+
+    if (!telegramData.ok) {
+      throw new Error(
+        telegramData.description ||
+          'Failed to send Telegram notification'
+      )
+    }
+
+    if (selectedFile) {
+      const photoForm = new FormData()
+
+      photoForm.append('chat_id', CHAT_ID)
+      photoForm.append('photo', selectedFile)
+
+      photoForm.append(
+        'caption',
+        `📸 Emergency Evidence\nCase ID: ${emergencyId}`
+      )
+
+      await fetch(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
+        {
+          method: 'POST',
+          body: photoForm,
+        }
+      )
+    }
+
+    setSubmitted(true)
+
+    setForm({
+      name: '',
+      phone: '',
+      location: '',
+      details: '',
+    })
+
+    setSelectedFile(null)
+    setFileName('')
+    setCoords(null)
+  } catch (error) {
+    console.error(error)
+
+    setSubmitError(
+      'Failed to alert rescue team. Please call emergency helpline immediately.'
+    )
+  } finally {
+    setSubmitting(false)
+  }
+}
 
   if (submitted) {
     return (
@@ -270,6 +412,11 @@ function Emergency() {
                 >
                   {submitting ? 'Submitting…' : 'Submit Emergency Report'}
                 </button>
+                {submitError && (
+  <div className="rounded-xl border border-error bg-error-container p-4 text-sm text-on-error-container">
+    {submitError}
+  </div>
+)}
                 <p className="mt-2 text-center text-sm text-on-surface-variant">
                   By submitting, you confirm the urgency of this report.
                 </p>
