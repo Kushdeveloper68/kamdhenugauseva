@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GOOGLE_SCRIPT_URL } from '../config/api'
+
 const contactItems = [
   {
     icon: 'location_on',
@@ -49,7 +49,7 @@ const handleSubmit = async (e) => {
     // Simulate async send (replace with real API call when backend is ready)
     try {
       
-      await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(import.meta.env.VITE_GOOGLE_SCRIPT_URL, {
   method: "POST",
   mode: "no-cors",
   headers: {

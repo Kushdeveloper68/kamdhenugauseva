@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GOOGLE_SCRIPT_URL } from '../config/api'
+
 const INITIAL = { firstName: '', lastName: '', email: '', phone: '', role: 'Caretaking', message: '' }
 
 function Volunteer() {
@@ -33,7 +33,7 @@ function Volunteer() {
     }
     setLoading(true)
    try {
-await fetch(GOOGLE_SCRIPT_URL, {
+await fetch(import.meta.env.VITE_GOOGLE_SCRIPT_URL, {
   method: "POST",
   mode: "no-cors",
   headers: {
