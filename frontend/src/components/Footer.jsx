@@ -38,6 +38,14 @@ function Footer() {
       <p className="font-['Work_Sans'] text-sm text-slate-500 dark:text-slate-400">
         © 2024 Kaam Denu Gaushala. Compassionate care for every soul.
       </p>
+      <a
+        href="https://kushdeveloper.me"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block font-['Work_Sans'] text-sm text-slate-500 dark:text-slate-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+      >
+        Made by Kush Developer
+      </a>
     </div>
   </footer>
   )
