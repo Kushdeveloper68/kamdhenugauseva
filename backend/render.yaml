@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: kaamdenu-backend
+    runtime: node
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        sync: false
+      - key: RESEND_FROM_NAME
+        sync: false
+      - key: GAUSHALA_NAME
+        sync: false
+      - key: GAUSHALA_REG_NO
+        sync: false
+      - key: GAUSHALA_80G_NO
+        sync: false
+      - key: GAUSHALA_PAN
+        sync: false
+      - key: GAUSHALA_ADDRESS
+        sync: false
+      - key: GAUSHALA_PHONE
+        sync: false
+      - key: GAUSHALA_EMAIL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
